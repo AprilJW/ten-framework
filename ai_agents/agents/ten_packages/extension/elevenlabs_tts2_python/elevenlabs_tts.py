@@ -166,9 +166,7 @@ class ElevenLabsTTS2Synthesizer:
                     }
                 )
             )
-            self.ten_env.log_info(
-                f" websocket connection established"
-            )
+            self.ten_env.log_info(" websocket connection established")
 
             while not self._session_closing:
                 # Get text to send from queue
@@ -183,7 +181,9 @@ class ElevenLabsTTS2Synthesizer:
                     )
                     text_data = {"text": " ", "flush": True}
                 if text_data is None:
-                    self.ten_env.log_debug("Received None from queue, ending send loop")
+                    self.ten_env.log_debug(
+                        "Received None from queue, ending send loop"
+                    )
                     continue
 
                 if text_data.text.strip() != "":
@@ -194,13 +194,11 @@ class ElevenLabsTTS2Synthesizer:
                         f"Sent text to WebSocket: {text_data.text[:50]}..."
                     )
 
-                if text_data.text_input_end==True:
+                if text_data.text_input_end == True:
                     await ws.send(json.dumps({"text": ""}))
                     self.ten_env.log_debug("Sent end signal to WebSocket")
                     return
-            self.ten_env.log_info(
-                f" websocket connection closed"
-            )
+            self.ten_env.log_info("websocket connection closed")
 
         except asyncio.CancelledError:
             self.ten_env.log_info("send_loop task cancelled")
